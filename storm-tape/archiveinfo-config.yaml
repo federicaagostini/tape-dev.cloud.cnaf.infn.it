@@ -1,0 +1,30 @@
+storage-areas:
+- name: test.vo
+  root: /tmp/disk/test.vo
+  access-point: /test.vo
+  policies:
+  - description: Stage aperations allowed to storage.stage:/ and xfer roles of test.vo
+    principals:
+    - jwt-scope:
+        iss: https://iam-dev.cloud.cnaf.infn.it/
+        scope: storage.stage:/
+    - fqan: /test.vo/xfers/Role=NULL/Capability=NULL
+    - fqan: /test.vo/xfers
+- name: dteam
+  root: /tmp/disk/dteam
+  access-point: /dteam
+  policies:
+  - description: Stage aperations allowed to storage.stage:/ and xfer roles of dteam
+    principals:
+    - jwt-scope:
+        iss: https://dteam-auth.cern.ch/
+        scope: storage.stage:/
+    - fqan: /dteam/xfers/Role=NULL/Capability=NULL
+    - fqan: /dteam/xfers
+
+telemetry:
+  service-name: storm-tape:api
+  tracing-endpoint: https://otello.cloud.cnaf.infn.it/collector/v1/traces
+
+port: 8081
+mirror-mode: on

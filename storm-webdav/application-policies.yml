@@ -1,0 +1,27 @@
+storm:
+  authz:
+    policies:
+    - sa: test.vo
+      actions:
+      - all
+      effect: permit
+      description: Grant read/write access to test.vo VOMS users and iam-dev tokens
+      principals:
+      - type: vo
+        params:
+          vo: test.vo
+      - type: jwt-issuer
+        params:
+          iss: https://iam-dev.cloud.cnaf.infn.it/
+    - sa: dteam
+      actions:
+      - all
+      effect: permit
+      description: Grant read/write access to dteam VOMS users and iam-dteam tokens
+      principals:
+      - type: vo
+        params:
+          vo: dteam
+      - type: jwt-issuer
+        params:
+          iss: https://dteam-auth.cern.ch/

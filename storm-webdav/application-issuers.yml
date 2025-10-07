@@ -1,0 +1,6 @@
+oauth:
+  issuers:
+    - name: dteam
+      issuer: https://dteam-auth.cern.ch/
+    - name: test.vo
+      issuer: https://iam-dev.cloud.cnaf.infn.it/

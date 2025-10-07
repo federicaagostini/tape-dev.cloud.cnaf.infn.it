@@ -1,0 +1,14 @@
+default_decision: rules
+
+distributed_tracing:
+  type: grpc
+  address: otello.cloud.cnaf.infn.it:4317
+  service_name: storm-tape:opa
+
+caching:
+  inter_query_builtin_value_cache:
+    named:
+      io_jwt:
+        max_num_entries: 1000
+        max_age: 1h
+

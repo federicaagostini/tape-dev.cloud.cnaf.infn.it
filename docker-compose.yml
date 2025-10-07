@@ -1,0 +1,122 @@
+networks:
+  default:
+    name: example
+  services:
+    name: services
+
+services:
+
+  storm-tape-api:
+    image: ${STORM_TAPE_IMAGE}:${STORM_TAPE_IMAGE_TAG}
+    hostname: ${HOSTNAME}
+
+    environment:
+      - TZ=Europe/Rome
+
+    volumes:
+      - ./storm-tape/service-config.yaml:/storm-tape/storm-tape.conf
+      - /storage/disk:/tmp/disk
+      
+    entrypoint: storm-tape-debug -c /storm-tape/storm-tape.conf
+    init: true
+
+    networks:
+      services:
+      
+  storm-tape-archiveinfo:
+    image: ${STORM_TAPE_IMAGE}:${STORM_TAPE_IMAGE_TAG}
+    hostname: ${HOSTNAME}
+    
+    environment:
+      - TZ=Europe/Rome
+
+    volumes:
+      - ./storm-tape/archiveinfo-config.yaml:/storm-tape/storm-tape.conf
+      - /storage/disk:/tmp/disk
+      
+    entrypoint: storm-tape-debug -c /storm-tape/storm-tape.conf
+    init: true
+
+    networks:
+      services:
+
+  nginx:
+    image: ${NGINX_IMAGE}:${NGINX_IMAGE_TAG}
+    hostname: ${HOSTNAME}
+
+    ports:
+      - "8443:8443"
+
+    depends_on:
+      storm-tape-api:
+        condition: service_started
+      storm-tape-archiveinfo:
+        condition: service_started
+      opa:
+        condition: service_started
+
+    environment:
+      - TZ=Europe/Rome
+      - X509_VOMS_DIR=/vomsdir
+
+    volumes:
+      - /etc/grid-security/vomsdir/:/vomsdir
+      - ./nginx/htpasswd:/etc/nginx/.htpasswd
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/storm.conf:/etc/nginx/conf.d/storm.conf
+      - ./hostcert.pem:/etc/storm/hostcert.pem
+      - ./hostkey.pem:/etc/storm/hostkey.pem
+
+    networks:
+      default:
+        aliases:
+          - ${HOSTNAME}
+      services:
+        aliases:
+          - ${HOSTNAME}
+
+  opa:
+    image: ${OPA_IMAGE}:${OPA_IMAGE_TAG}
+
+    environment:
+      - TZ=Europe/Rome
+      
+    volumes:
+      - ./storm-tape/service-config.yaml:/etc/opa/data.yaml
+      - ./storm-tape/opa-config.yaml:/etc/opa/config.yaml
+    
+    entrypoint: opa run --server /etc/opa --log-level debug -c /etc/opa/config.yaml --addr 0.0.0.0:8181
+    init: true
+
+    networks:
+      services:
+      
+  webdav:
+    image: ${STORM_WEBDAV_IMAGE}:${STORM_WEBDAV_IMAGE_TAG}
+    ports:
+      - "8444:8444"
+
+    environment:
+    - TZ=Europe/Rome
+    - STORM_WEBDAV_CERTIFICATE_PATH=/etc/grid-security/storm-webdav/hostcert.pem
+    - STORM_WEBDAV_PRIVATE_KEY_PATH=/etc/grid-security/storm-webdav/hostkey.pem
+    - STORM_WEBDAV_REQUIRE_CLIENT_CERT=false
+    - STORM_WEBDAV_HOSTNAME_0=tape-dev.cr.cnaf.infn.it
+    - STORM_WEBDAV_AUTHZ_SERVER_ENABLE=true
+    - STORM_WEBDAV_AUTHZ_SERVER_ISSUER=https://tape-dev.cr.cnaf.infn.it:8444
+    - STORM_WEBDAV_JVM_OPTS=-Dspring.profiles.active=policies,issuers
+
+    volumes:
+      - /storage/disk:/tmp/disk
+      - /etc/grid-security/certificates:/etc/grid-security/certificates
+      - ./hostcert.pem:/etc/grid-security/storm-webdav/hostcert.pem:ro
+      - ./hostkey.pem:/etc/grid-security/storm-webdav/hostkey.pem:ro
+      - /etc/grid-security/vomsdir/:/etc/grid-security/vomsdir:ro
+      - ./storm-webdav/test.vo.properties:/etc/storm/webdav/sa.d/test.vo.properties:ro
+      - ./storm-webdav/dteam.properties:/etc/storm/webdav/sa.d/dteam.properties:ro
+      - ./storm-webdav/application-policies.yml:/app/application-policies.yml:ro
+      - ./storm-webdav/application-issuers.yml:/app/application-issuers.yml:ro
+
+    networks:
+      default:
+
