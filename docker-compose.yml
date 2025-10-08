@@ -98,6 +98,7 @@ services:
 
     environment:
     - TZ=Europe/Rome
+    - STORM_WEBDAV_HTTPS_PORT=8444
     - STORM_WEBDAV_CERTIFICATE_PATH=/etc/grid-security/storm-webdav/hostcert.pem
     - STORM_WEBDAV_PRIVATE_KEY_PATH=/etc/grid-security/storm-webdav/hostkey.pem
     - STORM_WEBDAV_REQUIRE_CLIENT_CERT=false
