@@ -102,7 +102,7 @@ services:
     - STORM_WEBDAV_CERTIFICATE_PATH=/etc/grid-security/storm-webdav/hostcert.pem
     - STORM_WEBDAV_PRIVATE_KEY_PATH=/etc/grid-security/storm-webdav/hostkey.pem
     - STORM_WEBDAV_REQUIRE_CLIENT_CERT=false
-    - STORM_WEBDAV_HOSTNAME_0=131.154.163.24
+    - STORM_WEBDAV_HOSTNAME_0=tape-dev.cr.cnaf.infn.it
     - STORM_WEBDAV_AUTHZ_SERVER_ENABLE=true
     - STORM_WEBDAV_AUTHZ_SERVER_ISSUER=https://tape-dev.cr.cnaf.infn.it:8444
     - STORM_WEBDAV_JVM_OPTS=-Dspring.profiles.active=policies,issuers
@@ -115,6 +115,7 @@ services:
       - /etc/grid-security/vomsdir/:/etc/grid-security/vomsdir:ro
       - ./storm-webdav/test.vo.properties:/etc/storm/webdav/sa.d/test.vo.properties:ro
       - ./storm-webdav/dteam.properties:/etc/storm/webdav/sa.d/dteam.properties:ro
+      - ./storm-webdav/wlcg-tape-rest-api.json:/etc/storm/webdav/wlcg-tape-rest-api.json
       - ./storm-webdav/application-policies.yml:/app/application-policies.yml:ro
       - ./storm-webdav/application-issuers.yml:/app/application-issuers.yml:ro
 
