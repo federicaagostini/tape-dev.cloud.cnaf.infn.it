@@ -3,7 +3,7 @@
   "description": "This is the tape REST API endpoint used for testing at CNAF-T1",
   "endpoints": [
     {
-      "uri": "https://tape-dev.cr.cnaf.infn.it:8443/api/v1",
+      "uri": "https://tape-dev.cloud.cnaf.infn.it:8443/api/v1",
       "version": "v1",
       "metadata": {
         "test": "test"
