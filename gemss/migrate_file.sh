@@ -6,19 +6,19 @@ if [ $# -ne 1 ]; then
   exit 1
 fi
 
-SRC_ROOT="/storage/disk"
-DST_ROOT="/storage/tape"
+ROOT_DIR=${ROOT_DIR:-"/storage/disk"}
+TAPE_DIR=${TAPE_DIR:-"/storage/tape"}
 
-# Relative path with respect to SRC_ROOT
+# Relative path with respect to ROOT_DIR
 file="$1"
-REL_PATH="${file#$SRC_ROOT/}"
+REL_PATH="${file#$ROOT_DIR/}"
 
-DST_FILE="$DST_ROOT/$REL_PATH"
+DST_FILE="$TAPE_DIR/$REL_PATH"
 
 DST_DIR=$(dirname "$DST_FILE")
 mkdir -p "$DST_DIR"
 
-echo "Migrating: $file on tape"
+echo "Migrating $file on tape"
 
 cp "$file" "$DST_FILE"
 attr -r storm.premigrate "$file"
