@@ -8,20 +8,21 @@ if [ ! -d "$LOG_DIR" ]; then
 fi
 
 TS=$(date +%Y%m%d_%H%M)
-OUTPUT_FILE="${LOG_DIR}/${TS}_migrated_files"
 LOG_FILE="${LOG_DIR}/${TS}_gemss.log"
+MIGRATE_FILE="${LOG_DIR}/${TS}_migrated_files"
+RECALL_FILE="${LOG_DIR}/${TS}_recall_files"
 
-: > "${OUTPUT_FILE}"
 : > "${LOG_FILE}"
+: > "${MIGRATE_FILE}"
+: > "${RECALL_FILE}"
 
 exec >"${LOG_FILE}" 2>&1
 
 echo "--------------------------------------------------"
-echo "$(date):"
-echo "Look for files to be migrated at"
-echo "$ROOT_DIR"
-echo "Log file saved in $LOG_FILE"
 echo "--------------------------------------------------"
+echo "$(date):"
+echo "Start scanning files to be migrated at $ROOT_DIR"
+echo "Log file saved in $LOG_FILE"
 echo "--------------------------------------------------"
 
 if ! command -v getfattr >/dev/null 2>&1; then
@@ -40,9 +41,8 @@ while IFS= read -r f; do
   if getfattr -n user.storm.premigrate --absolute-names --only-values -- "$f"; then
     ((FOUND++))
     migrate_file.sh "$f"
-    printf '%s\n' "$f" >> "${OUTPUT_FILE}"
+    printf '%s\n' "$f" >> "${MIGRATE_FILE}"
     echo "File "$f" migrated"
-    echo "--------------------------------------------------"
   fi
 done < <(find "$ROOT_DIR" -type f 2>/dev/null)
 set -e
@@ -50,6 +50,35 @@ set -e
 echo "--------------------------------------------------"
 echo "Migration completed at $(date)"
 echo "Total files: $TOTAL"
-echo "Migrated files: $FOUND"
-echo "List of migrated files saved in ${OUTPUT_FILE}"
+echo "Number of migrated files: $FOUND"
+echo "List of migrated files saved in $MIGRATE_FILE"
+echo "--------------------------------------------------"
+
+echo "--------------------------------------------------"
+echo "$(date):"
+echo "Start scanning files to be recalled in $ROOT_DIR"
+echo "Log file saved in $LOG_FILE"
+echo "--------------------------------------------------"
+
+curl "https://$STORM_TAPE_ENDPOINT/recalltable/tasks" -H "Content-Type:text/plain" \
+  -u "$GEMSS_USER:$GEMSS_PWD" -X PUT -d first="$RECALL_QUEUE" -ks >> "$RECALL_FILE" 2>&1 || true
+
+TOTAL=0
+
+set +e
+while IFS= read -r line; do
+  # Skip empty lines
+  [ -z "$line" ] && continue
+  ((TOTAL++))
+  STORM_TAPE_ROOT_PATH=$(echo "$line" | awk '{print $2}')
+  recall_file.sh "$STORM_TAPE_ROOT_PATH"
+  echo "File "$STORM_TAPE_ROOT_PATH" recalled"
+done < "$RECALL_FILE"
+set -e
+
+echo "--------------------------------------------------"
+echo "Recall completed at $(date)"
+echo "Number of recalled files: $FOUND"
+echo "List of recalled files saved in $RECALL_FILE"
+echo "--------------------------------------------------"
 echo "--------------------------------------------------"
