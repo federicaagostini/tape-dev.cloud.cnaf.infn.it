@@ -20,12 +20,18 @@ DST_FILE="$ROOT_DIR/$REL_PATH"
 
 echo "Recalling "$DST_FILE" on disk"
 
-if (( RANDOM % 100 < 7 )); then
+if (( RANDOM % 100 > 7 )); then
   cp "$SRC_FILE" "$DST_FILE"
+else
+  echo "Unable to copy the file $DST_FILE from Tape"
+  exit 1
 fi
 
-if (( RANDOM % 100 < 7 )); then
+if (( RANDOM % 100 >7 )); then
   attr -r TSMRecT "$DST_FILE"
+else
+  echo "Unable to remove the extended attribute TSMRecT from file $DST_FILE"
+  exit 1
 fi
 
 now=$(date +%s)
@@ -33,4 +39,7 @@ expdate=$(($now+$PIN_TIME))
 
 if (( RANDOM % 100 < 7 )); then
   attr -s storm.pinned -V $expdate "$DST_FILE"
+else
+  echo "Unable add pin to file $DST_FILE"
+  exit 1
 fi
