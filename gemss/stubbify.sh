@@ -74,7 +74,7 @@ while IFS= read -r file; do
     if has_attr "$file" "storm.pinned"; then
         PINVAL=$(get_attr_value "$file" "storm.pinned")
         CURRENT_TS=$(date +%s)
-        if (( CURRENT_TS > PINVAL )); then
+        if (( CURRENT_TS < PINVAL )); then
             continue
         fi
     fi
