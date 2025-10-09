@@ -20,25 +20,26 @@ has_premigrate_attr() {
   return 1
 }
 
-LOG_DIR={LOG_DIR:-"/var/log/gemss"}
+LOG_DIR="/etc/storm/log/gemss"
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"
+  chmod 755 "$LOG_DIR"
 fi
 
 TS=$(date +%Y%m%d_%H%M)
 OUTPUT_FILE="${LOG_DIR}/${TS}_files_to_be_migrated"
 LOG_FILE="${LOG_DIR}/${TS}_files_to_be_migrated.log"
 
-touch "${OUTPUT_FILE}"
-touch "${LOG_FILE}"
+: > "${OUTPUT_FILE}"
+: > "${LOG_FILE}"
 
-exec >"${LOGFILE}" 2>&1
+exec >"${LOG_FILE}" 2>&1
 
-ROOT_DIR={ROOT_DIR:-"/storage/disk"}
+ROOT_DIR="/storage/disk"
 
 echo "-----------------------------------------"
-echo "Start scanning directory $ROOT_DIR files at $(date)"
+echo "Start scanning directory $ROOT_DIR at $(date)"
 echo "Log file saved in $LOG_FILE"
 echo "-----------------------------------------"
 
@@ -47,10 +48,22 @@ if ! command -v getfattr >/dev/null 2>&1; then
   exit 2
 fi
 
-while IFS= read -r -d '' f; do
+FOUND=0
+TOTAL=0
+
+set +e
+while IFS= read -r f; do
+  ((TOTAL++))
   if has_premigrate_attr "$f"; then
+    ((FOUND++))
     printf '%s\n' "$f" >> "${OUTPUT_FILE}"
   fi
-done < <(find "$ROOT_DIR" -type f -print0 2>/dev/null)
+done < <(find "$ROOT_DIR" -type f 2>/dev/null)
+set -e
 
-echo "Done. Files to be migrated saved in ${OUTPUT_FILE}"
+echo "---------------------------------------------"
+echo "Scan completed at $(date)"
+echo "Total files: $TOTAL"
+echo "Files with storm.premigrate attribute: $FOUND"
+echo "Files to be migrated saved in ${OUTPUT_FILE}"
+echo "---------------------------------------------"
