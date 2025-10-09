@@ -27,7 +27,7 @@ else
   exit 1
 fi
 
-if (( RANDOM % 100 >7 )); then
+if (( RANDOM % 100 > 7 )); then
   attr -r TSMRecT "$DST_FILE"
 else
   echo "Unable to remove the extended attribute TSMRecT from file $DST_FILE"
@@ -37,7 +37,7 @@ fi
 now=$(date +%s)
 expdate=$(($now+$PIN_TIME))
 
-if (( RANDOM % 100 < 7 )); then
+if (( RANDOM % 100 > 7 )); then
   attr -s storm.pinned -V $expdate "$DST_FILE"
 else
   echo "Unable add pin to file $DST_FILE"
