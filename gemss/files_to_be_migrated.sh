@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 # Check if file has "storm.premigrate" extended attribute
@@ -24,7 +23,6 @@ LOG_DIR="/etc/storm/log/gemss"
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"
-  chmod 755 "$LOG_DIR"
 fi
 
 TS=$(date +%Y%m%d_%H%M)
