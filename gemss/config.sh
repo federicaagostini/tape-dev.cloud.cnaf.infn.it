@@ -1,4 +1,4 @@
-export LOG_DIR="/etc/storm/log/gemss"
+export LOG_DIR="/var/log/gemss"
 export ROOT_DIR="/storage/disk"
 export TAPE_DIR="/storage/tape"
 export STORM_TAPE_ENDPOINT="131.154.163.24:8443"
