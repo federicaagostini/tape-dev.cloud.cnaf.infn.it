@@ -106,6 +106,10 @@ services:
     - STORM_WEBDAV_AUTHZ_SERVER_ENABLE=true
     - STORM_WEBDAV_AUTHZ_SERVER_ISSUER=https://tape-dev.cr.cnaf.infn.it:8444
     - STORM_WEBDAV_JVM_OPTS=-Dspring.profiles.active=policies,issuers
+    - DTEAM_CLIENT_ID
+    - DTEAM_CLIENT_SECRET
+    - TESTVO_CLIENT_ID
+    - TESTVO_CLIENT_SECRET
 
     volumes:
       - /storage/disk:/tmp/disk
