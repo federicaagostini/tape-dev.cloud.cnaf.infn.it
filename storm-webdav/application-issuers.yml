@@ -1,4 +1,5 @@
 oauth:
+  enable-oidc: true
   issuers:
     - name: dteam
       issuer: https://dteam-auth.cern.ch/
