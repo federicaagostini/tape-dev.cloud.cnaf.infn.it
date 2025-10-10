@@ -10,6 +10,7 @@ storage-areas:
         scope: storage.stage:/
     - fqan: /test.vo/xfers/Role=NULL/Capability=NULL
     - fqan: /test.vo/xfers
+    - x509-subject: CN=Federica Agostini fagostin@infn.it,O=Istituto Nazionale di Fisica Nucleare,C=IT,DC=tcs,DC=terena,DC=org
 - name: dteam
   root: /tmp/disk/dteam
   access-point: /dteam
@@ -19,8 +20,8 @@ storage-areas:
     - jwt-scope:
         iss: https://dteam-auth.cern.ch/
         scope: storage.stage:/
-    - fqan: /dteam/xfers/Role=NULL/Capability=NULL
-    - fqan: /dteam/xfers
+    - fqan: /dteam
+    - x509-subject: CN=Federica Agostini fagostin@infn.it,O=Istituto Nazionale di Fisica Nucleare,C=IT,DC=tcs,DC=terena,DC=org
 
 telemetry:
   service-name: storm-tape:api

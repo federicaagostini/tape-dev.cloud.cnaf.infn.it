@@ -1,6 +1,6 @@
 {
   "sitename": "StoRM@CNAF",
-  "description": "This is the tape REST API endpoint used for testing at CNAF-T1",
+  "description": "This is the tape REST API endpoint used for testing at CNAF",
   "endpoints": [
     {
       "uri": "https://tape-dev.cr.cnaf.infn.it:8443/api/v1",
