@@ -1,17 +1,6 @@
 #!/bin/bash
 set -ex
 
-FETCH_CRL_TIMEOUT_SECS=${FETCH_CRL_TIMEOUT_SECS:-5}
-
-if [[ -z "${FORCE_TRUST_ANCHORS_UPDATE}" ]]; then
-  echo "Skipping trust anchors update (default behaviour)."
-  exit 0
-fi
-
-fetch-crl --verbose -T ${FETCH_CRL_TIMEOUT_SECS} || true
-
-# Update centos ca-trust
-
 for c in /etc/grid-security/certificates/*.pem; do
   cp $c /etc/pki/ca-trust/source/anchors/
 done
