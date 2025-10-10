@@ -2,7 +2,5 @@ LOG_DIR="/var/log/gemss"
 ROOT_DIR="/storage/disk"
 TAPE_DIR="/storage/tape"
 STORM_TAPE_ENDPOINT="131.154.163.24:8443"
-GEMSS_USER="gemss"
-GEMSS_PWD="pwd"
 RECALL_QUEUE=10
 PIN_TIME=21600

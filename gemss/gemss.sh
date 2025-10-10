@@ -3,6 +3,7 @@ set -e
 
 set -a
 source config.sh
+source gemss-secrets.sh
 set +a
 
 if [ ! -d "$LOG_DIR" ]; then
