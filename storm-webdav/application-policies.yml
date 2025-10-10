@@ -13,6 +13,9 @@ storm:
       - type: jwt-issuer
         params:
           iss: https://iam-dev.cloud.cnaf.infn.it/
+      - type: x509-subject
+        params:
+          subject: CN=Federica Agostini fagostin@infn.it,O=Istituto Nazionale di Fisica Nucleare,C=IT,DC=tcs,DC=terena,DC=org
     - sa: dteam
       actions:
       - all
@@ -25,3 +28,7 @@ storm:
       - type: jwt-issuer
         params:
           iss: https://dteam-auth.cern.ch/
+      - type: x509-subject
+        params:
+          subject: CN=Federica Agostini fagostin@infn.it,O=Istituto Nazionale di Fisica Nucleare,C=IT,DC=tcs,DC=terena,DC=org
+
