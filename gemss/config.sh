@@ -1,8 +1,8 @@
-export LOG_DIR="/var/log/gemss"
-export ROOT_DIR="/storage/disk"
-export TAPE_DIR="/storage/tape"
-export STORM_TAPE_ENDPOINT="131.154.163.24:8443"
-export GEMSS_USER="gemss"
-export GEMSS_PWD="pwd"
-export RECALL_QUEUE=10
-export PIN_TIME=21600
+LOG_DIR="/var/log/gemss"
+ROOT_DIR="/storage/disk"
+TAPE_DIR="/storage/tape"
+STORM_TAPE_ENDPOINT="131.154.163.24:8443"
+GEMSS_USER="gemss"
+GEMSS_PWD="pwd"
+RECALL_QUEUE=10
+PIN_TIME=21600

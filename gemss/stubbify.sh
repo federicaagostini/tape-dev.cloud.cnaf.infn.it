@@ -30,7 +30,9 @@ stubbify_file() {
     fi
 }
 
+set -a
 source config.sh
+set +a
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"

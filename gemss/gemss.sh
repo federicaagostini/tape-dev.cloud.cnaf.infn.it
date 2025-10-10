@@ -1,7 +1,9 @@
 #!/bin/bash
 set -e
 
+set -a
 source config.sh
+set +a
 
 if [ ! -d "$LOG_DIR" ]; then
   mkdir -p "$LOG_DIR"
@@ -69,16 +71,16 @@ set +e
 while IFS= read -r line; do
   # Skip empty lines
   [ -z "$line" ] && continue
-  ((TOTAL++))
   STORM_TAPE_ROOT_PATH=$(echo "$line" | awk '{print $2}')
   recall_file.sh "$STORM_TAPE_ROOT_PATH"
+  ((TOTAL++))
   echo "File "$STORM_TAPE_ROOT_PATH" recalled"
 done < "$RECALL_FILE"
 set -e
 
 echo "--------------------------------------------------"
 echo "Recall completed at $(date)"
-echo "Number of recalled files: $FOUND"
+echo "Number of recalled files: $TOTAL"
 echo "List of recalled files saved in $RECALL_FILE"
 echo "--------------------------------------------------"
 echo "--------------------------------------------------"
