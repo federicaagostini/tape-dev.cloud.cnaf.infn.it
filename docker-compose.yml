@@ -108,7 +108,7 @@ services:
     - STORM_WEBDAV_JVM_OPTS=-Dspring.profiles.active=policies,issuers
     
     env_file:
-      - webdav/webdav-secrets
+      - storm-webdav/webdav-secrets
 
     volumes:
       - /storage/disk:/tmp/disk
