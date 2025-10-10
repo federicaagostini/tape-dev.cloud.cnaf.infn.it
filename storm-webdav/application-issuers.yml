@@ -3,7 +3,7 @@ oauth:
   issuers:
   - name: dteam
     issuer: https://dteam-auth.cern.ch/
-  - name: test.vo
+  - name: testvo
     issuer: https://iam-dev.cloud.cnaf.infn.it/
 
 spring:
@@ -13,7 +13,7 @@ spring:
         provider:
           dteam:
             issuer-uri: https://dteam-auth.cern.ch/
-          test.vo:
+          testvo:
             issuer-uri: https://iam-dev.cloud.cnaf.infn.it/
         registration:
           dteam:
@@ -25,10 +25,10 @@ spring:
             scope:
             - openid
             - profile
-          "test.vo":
-            provider: test.vo
+          testvo:
+            provider: testvo
             authorization-grant-type: authorization_code
-            client-name: test.vo
+            client-name: testvo
             client-id: ${TESTVO_CLIENT_ID:-client}
             client-secret: ${TESTVO_CLIENT_SECRET:-secret}
             scope:
