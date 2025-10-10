@@ -25,7 +25,7 @@ spring:
             scope:
             - openid
             - profile
-          "[test.vo]":
+          "test.vo":
             provider: test.vo
             authorization-grant-type: authorization_code
             client-name: test.vo
